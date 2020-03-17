@@ -129,6 +129,7 @@ function guess(e) {
       if (guess) {
         ui.changeGuessState(e.target, "correct");
         correctGuesses++;
+        console.log(`Right Guess: ${e.target.id}`);
         if (correctGuesses === word.length) {
           ui.gameOver(
             true,
@@ -138,6 +139,7 @@ function guess(e) {
       } else {
         ui.changeGuessState(e.target, "guessed");
         numGuesses--;
+        console.log(`Wrong Guess: ${e.target.id}`);
         if (numGuesses == 0) {
           ui.gameOver(false, `Game Over, You Lose! Word was ${word}`);
         }
@@ -147,7 +149,7 @@ function guess(e) {
   e.preventDefault();
 }
 
-const words = ["truck", "airplane", "basketball", "pizza"];
+let word;
 let numGuesses;
 let category;
 let correctGuesses;
@@ -159,13 +161,17 @@ function startNewGame(e) {
   //hide new gae button
   ui.playGameEl.style = "display: none";
 
-  //get word
-  word = words[Math.floor(Math.random() * words.length)].toUpperCase();
-  category = "Things";
-
   numGuesses = 6;
   correctGuesses = 0;
-  console.log(word);
 
-  ui.initGame(word);
+  //get word
+  fetch("http://localhost:8080/game")
+    .then(res => res.json())
+    .then(data => {
+      word = data.word.toUpperCase();
+      category = data.category;
+      console.log(`Word: ${word} Category: ${category}`);
+      ui.initGame(word);
+    })
+    .catch(err => console.log(err));
 }
