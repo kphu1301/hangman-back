@@ -11,27 +11,17 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class WordBank {
-
-	private static WordBank wordBank;
-	private Map<String, String> wordList;
-	private List<String> categories;
-	private String baseUrl = "https://www.enchantedlearning.com";
+public class EnchantedLearningWordBankParser extends WordBankHtmlParser {
 	
-	private WordBank() {
+	public EnchantedLearningWordBankParser() {
+		baseUrl = "http://www.enchantedlearning.com";
 		wordList = new HashMap<>();
 		categories = new ArrayList<>();
 		parseHtmlForCategoriesAndWords();
 	}
 	
-	public static WordBank getInstance() {
-		if (wordBank == null) {
-			wordBank = new WordBank();
-		}
-		return wordBank;
-	}
-	
-	private void parseHtmlForCategoriesAndWords() {
+	@Override
+	protected void parseHtmlForCategoriesAndWords() {
 		//word bank
 		List<String> wordBank = new ArrayList<>();
 		String[] wordInfo = new String[2];
@@ -65,28 +55,28 @@ public class WordBank {
 		try {
 			String url = baseUrl + path;
 			Document doc = Jsoup.connect(url).get();
+
 			
 			Elements wordLinks = doc.select("div.wordlist-item");
+			
 
 			for (Element wordLink : wordLinks) {
-				String word = wordLink.text().replaceAll("[^a-zA-Z]", "").toUpperCase();
-				wordList.put(word, category);
+				//remove word if more than 2 words
+				String word = wordLink.text().replaceAll("[^a-zA-Z\\s]", "").toUpperCase();
+				int spaces = 0;
+				for (int i = 0; i < word.length(); i++) {
+					if (word.charAt(i) == ' ') {
+						spaces++;
+					}
+				}
+				if (spaces <= 1) {
+					wordList.put(word, category);
+				}
 			}
 			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public Word getGameWord() {
-		List<String> words = new ArrayList(wordList.keySet());
-		
-		int wordIndex = ThreadLocalRandom.current().nextInt(words.size());
-		String word = words.get(wordIndex);
-		String category = wordList.get(word);
-		Word gameWord = new Word(word, category);
-		
-		return gameWord;
 	}
 }

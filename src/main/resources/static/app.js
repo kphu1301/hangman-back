@@ -11,15 +11,22 @@ class UI {
     const categoryDiv = document.createElement("div");
     categoryDiv.className = "category";
     categoryDiv.innerHTML = `
-      <h2 id="category">Category: ${category}</h2>
+      <h2 id="category">Category: ${gameState.category}</h2>
+      <h4 id="guesses-remaining">Guesses Left: ${gameState.currNumGuesses}</h4>
     `;
 
     gameDiv.appendChild(categoryDiv);
 
     let html = "";
     for (let i = 0; i < word.length; i++) {
+      let str = "";
+      if (word[i] !== " ") {
+        str = "__&nbsp";
+      } else {
+        str = "&nbsp&nbsp&nbsp";
+      }
       html += `
-        <h1 class="word-letter letter-${word[i]} d-inline" id="letter-${i}">__&nbsp</h1>
+        <h1 class="word-letter d-inline" id="letter-${i}">${str}</h1>
       `;
     }
     div.innerHTML = html;
@@ -43,6 +50,11 @@ class UI {
     this.togglePlayGame("hide");
   }
 
+  updateGuessesLeft() {
+    document.querySelector("#guesses-remaining").textContent = `
+      Guesses Left: ${gameState.currNumGuesses}
+    `;
+  }
   changeGuessState(button, state) {
     if (state === "initial") {
       button.dataset.status = state;
@@ -78,17 +90,23 @@ class UI {
       .querySelector(".category")
       .insertAdjacentElement("beforebegin", div);
 
-    this.togglePlayGame("show");
     setTimeout(() => {
       div.remove();
       document.querySelector(".game-container").remove();
+      this.togglePlayGame("show");
     }, 5000);
   }
-  reveal(letter) {
-    const letterDivs = document.querySelectorAll(`.letter-${letter}`);
-    letterDivs.forEach(letterDiv => {
-      letterDiv.innerHTML = `<u>${letter}</ul>`;
-    });
+  reveal(letter, data) {
+    const letterDivs = document.querySelectorAll(`.word-letter`);
+    for (let i = 0; i < gameState.revealedLetters.length; i++) {
+      if (data.revealedLetters[i] !== null) {
+        if (gameState.revealedLetters[i] === null) {
+          letterDivs[i].innerHTML = `
+              <u>${letter}</ul>
+          `;
+        }
+      }
+    }
   }
 
   showInputLetters(gameDiv) {
@@ -115,44 +133,58 @@ class UI {
 }
 
 function guess(e) {
-  if (numGuesses != 0) {
+  if (gameState.currNumGuesses != 0) {
     // check guess
     if (e.target.dataset.status === "false") {
-      let guess = false;
-      for (let i = 0; i < word.length; i++) {
-        if (word[i] === e.target.id) {
-          //letter is correct, show matching letter
-          ui.reveal(word[i]);
-          guess = true;
-        }
-      }
-      if (guess) {
-        ui.changeGuessState(e.target, "correct");
-        correctGuesses++;
-        console.log(`Right Guess: ${e.target.id}`);
-        if (correctGuesses === word.length) {
-          ui.gameOver(
-            true,
-            `Game Over, You Win with ${numGuesses} guesses left!`
-          );
-        }
-      } else {
-        ui.changeGuessState(e.target, "guessed");
-        numGuesses--;
-        console.log(`Wrong Guess: ${e.target.id}`);
-        if (numGuesses == 0) {
-          ui.gameOver(false, `Game Over, You Lose! Word was ${word}`);
-        }
-      }
+      let guess = {
+        gameId: gameState.id,
+        guess: e.target.id
+      };
+
+      fetch(`http://localhost:8080/games/${gameState.id}`, {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        method: "POST",
+        body: JSON.stringify(guess)
+      })
+        .then(res => res.json())
+        .then(data => {
+          //correct guess
+          if (gameState.correctGuesses != data.correctGuesses) {
+            ui.changeGuessState(e.target, "correct");
+            ui.reveal(e.target.id, data);
+            updateGameState(data);
+            console.log(
+              `correctGuesses: ${gameState.correctGuesses}  guessesToWin: ${gameState.guessesToWin}`
+            );
+            if (data.status === "WIN") {
+              ui.gameOver(
+                true,
+                `Game Over, You Win with ${gameState.currNumGuesses} guesses left!`
+              );
+            }
+          }
+          //wrong guess
+          else if (gameState.currNumGuesses != data.currNumGuesses) {
+            ui.changeGuessState(e.target, "guessed");
+            updateGameState(data);
+            ui.updateGuessesLeft();
+            if (data.status === "LOSS") {
+              ui.gameOver(
+                false,
+                `Game Over, You Lose! Word: ${gameState.word}`
+              );
+            }
+          }
+        })
+        .catch(err => console.log(err));
     }
   }
   e.preventDefault();
 }
 
-let word;
-let numGuesses;
-let category;
-let correctGuesses;
+let gameState;
 const ui = new UI();
 
 // play new game event
@@ -161,17 +193,17 @@ function startNewGame(e) {
   //hide new gae button
   ui.playGameEl.style = "display: none";
 
-  numGuesses = 6;
-  correctGuesses = 0;
-
   //get word
-  fetch("http://localhost:8080/game")
+  fetch("http://localhost:8080/games")
     .then(res => res.json())
     .then(data => {
-      word = data.word.toUpperCase();
-      category = data.category;
-      console.log(`Word: ${word} Category: ${category}`);
-      ui.initGame(word);
+      gameState = data;
+      console.log(gameState);
+      ui.initGame(gameState.word);
     })
     .catch(err => console.log(err));
+}
+
+function updateGameState(state) {
+  gameState = state;
 }
