@@ -102,16 +102,19 @@ body {
 }
 
 .result {
-  height: 5em;
-  width: 10em;
+  min-height: 0;
+  min-width: 0;
+  font-size: 2em;
   border-style: solid;
+  border-color: black;
   margin-bottom: 1em;
+  padding: 0.25em;
   white-space: nowrap;
   overflow: hidden;
 }
 .result.win {
-  background-color: #aff2af;
+  background-color: #00b300;
 }
-.result.lose {
+.result.loss {
   background-color: #ff4d4d;
 }

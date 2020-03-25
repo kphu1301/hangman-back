@@ -90,7 +90,7 @@ class UI {
       div.remove();
       document.querySelector(".game-container").remove();
       this.togglePlayGame("show");
-    }, 5000);
+    }, 7000);
   }
 
   reveal(letter, data) {
