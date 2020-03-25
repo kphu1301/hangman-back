@@ -52,8 +52,9 @@ body {
 }
 .word-container {
   font-style: bold;
+  flex-wrap: wrap;
   display: flex;
-  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 .word-letter {
@@ -77,8 +78,13 @@ body {
 .word-letter.space {
   border-bottom-style: none;
 }
+
+.input-letters {
+  display: flex;
+  flex-wrap: wrap;
+}
 .input-letter {
-  margin-top: 3em;
+  margin-top: 0.5em;
   height: 4.5em;
   width: 3em;
   border-radius: 0.5em;
