@@ -1,4 +1,4 @@
-package com.kphu1301.hangman.Word;
+package com.kphu1301.hangman.word;
 
 import java.io.IOException;
 import java.util.ArrayList;

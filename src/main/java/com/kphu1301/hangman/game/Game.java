@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.kphu1301.hangman.Word.Word;
+import com.kphu1301.hangman.word.Word;
 
 public class Game {
 	private static long numGames = 0;

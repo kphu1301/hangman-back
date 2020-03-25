@@ -41,7 +41,6 @@ public class GameController {
 		}
 		Game game = context.getBean(Games.class).getGame(gameId);
 		game.makeGuess(guess);
-		System.out.println("guess detected");
 		return game;
 	}
 	

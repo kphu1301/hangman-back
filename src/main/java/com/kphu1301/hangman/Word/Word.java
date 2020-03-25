@@ -1,4 +1,4 @@
-package com.kphu1301.hangman.Word;
+package com.kphu1301.hangman.word;
 
 public class Word {
 	

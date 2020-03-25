@@ -1,0 +1,117 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-image: url("/css/images/earthspirit.png");
+  background-size: auto;
+  color: white;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+}
+#title {
+  margin-top: 10vh;
+  margin-bottom: 1em;
+  color: greenyellow;
+  font-size: 2.5em;
+  font-weight: bold;
+}
+
+.play-btn {
+  margin-top: 1em;
+  width: 5rem;
+  height: 3rem;
+  background-color: blue;
+  color: white;
+  font-weight: bold;
+  border-radius: 0.75em;
+  border-style: solid;
+  border-color: darkblue;
+  line-height: 1.25em;
+}
+
+.play-btn:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.game-container {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+}
+.word-container {
+  font-style: bold;
+  display: flex;
+  margin-top: 1em;
+}
+
+.word-letter {
+  margin: 0 1em;
+  height: 6em;
+  width: 3em;
+  border-bottom-style: solid;
+  border-bottom-width: thick;
+  text-align: center;
+}
+
+.word-letter.correct {
+  border-bottom-style: none;
+  min-width: 0;
+}
+
+.word-letter p {
+  font-size: 4em;
+}
+
+.word-letter.space {
+  border-bottom-style: none;
+}
+.input-letter {
+  margin-top: 3em;
+  height: 4.5em;
+  width: 3em;
+  border-radius: 0.5em;
+  border-style: solid;
+  border-width: thin;
+  background-color: #ffdb99;
+  border-color: orange;
+  font-weight: bold;
+}
+.input-letter:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.input-letter.guessed {
+  background-color: red;
+}
+
+.input-letter.correct {
+  background-color: green;
+}
+
+.result {
+  height: 5em;
+  width: 10em;
+  border-style: solid;
+  margin-bottom: 1em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.result.win {
+  background-color: #aff2af;
+}
+.result.lose {
+  background-color: #ff4d4d;
+}

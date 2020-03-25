@@ -1,11 +1,13 @@
-package com.kphu1301.hangman.game;
+package com.kphu1301.hangman.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
-import com.kphu1301.hangman.Word.LiquipediaWordBankParser;
-import com.kphu1301.hangman.Word.WordBankHtmlParser;
+import com.kphu1301.hangman.game.Game;
+import com.kphu1301.hangman.game.Games;
+import com.kphu1301.hangman.word.LiquipediaWordBankParser;
+import com.kphu1301.hangman.word.WordBankHtmlParser;
 
 @Configuration
 public class AppConfig {

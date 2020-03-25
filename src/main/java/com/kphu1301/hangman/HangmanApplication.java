@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.kphu1301.hangman.game.AppConfig;
+import com.kphu1301.hangman.config.AppConfig;
 import com.kphu1301.hangman.game.Game;
 
 @SpringBootApplication

@@ -1,37 +1,37 @@
 class UI {
   constructor() {
     this.playGameEl = document.querySelector(".play-btn");
-    this.promptEl = document.querySelector("#prompt");
+    this.titleEl = document.querySelector("#title");
     this.containerEl = document.querySelector(".container");
   }
-  showUnderscores(word, gameDiv) {
-    const div = document.createElement("div");
-    div.className = "word-container";
-
+  showWordHidden(word, gameDiv) {
     const categoryDiv = document.createElement("div");
     categoryDiv.className = "category";
     categoryDiv.innerHTML = `
-      <h2 id="category">Category: ${gameState.category}</h2>
-      <h4 id="guesses-remaining">Guesses Left: ${gameState.currNumGuesses}</h4>
+    <h2>Category: ${gameState.category}
     `;
-
     gameDiv.appendChild(categoryDiv);
 
-    let html = "";
+    const guessesLeftDiv = document.createElement("div");
+    guessesLeftDiv.className = "guesses-left";
+    guessesLeftDiv.innerHTML = `
+      <h3>Guesses Left: ${gameState.currNumGuesses}</h4>
+    `;
+    gameDiv.appendChild(guessesLeftDiv);
+
+    const wordDiv = document.createElement("div");
+    wordDiv.className = "word-container";
     for (let i = 0; i < word.length; i++) {
-      let str = "";
-      if (word[i] !== " ") {
-        str = "__&nbsp";
+      let letterDiv = document.createElement("div");
+      if (word[i] === " ") {
+        letterDiv.className = "word-letter space";
       } else {
-        str = "&nbsp&nbsp&nbsp";
+        letterDiv.className = "word-letter";
       }
-      html += `
-        <h1 class="word-letter d-inline" id="letter-${i}">${str}</h1>
-      `;
+
+      wordDiv.appendChild(letterDiv);
     }
-    div.innerHTML = html;
-    gameDiv.appendChild(div);
-    gameDiv.appendChild(document.createElement("br"));
+    gameDiv.appendChild(wordDiv);
   }
 
   initGame(word) {
@@ -40,7 +40,7 @@ class UI {
     gameDiv.className = "game-container";
 
     //show word
-    ui.showUnderscores(word, gameDiv);
+    ui.showWordHidden(word, gameDiv);
 
     //show user input
     ui.showInputLetters(gameDiv);
@@ -51,21 +51,17 @@ class UI {
   }
 
   updateGuessesLeft() {
-    document.querySelector("#guesses-remaining").textContent = `
-      Guesses Left: ${gameState.currNumGuesses}
+    document.querySelector(".guesses-left").innerHTML = `
+      <h3>Guesses Left: ${gameState.currNumGuesses}</h3>
     `;
   }
   changeGuessState(button, state) {
     if (state === "initial") {
-      button.dataset.status = state;
-      button.classList.replace("btn-secondary", "btn-warning");
-      button.classList.replace("btn-success", "btn-warning");
+      button.className = "input-letter";
     } else if (state === "guessed") {
-      button.classList.replace("btn-warning", "btn-secondary");
-      button.dataset.status = "guessed";
+      button.className = "input-letter guessed";
     } else if (state === "correct") {
-      button.classList.replace("btn-warning", "btn-success");
-      button.dataset.status = "correct";
+      button.className = "input-letter correct";
     }
   }
 
@@ -80,9 +76,9 @@ class UI {
   gameOver(won, message) {
     const div = document.createElement("div");
     if (won) {
-      div.className = "result-win alert alert-success";
+      div.className = "result win";
     } else {
-      div.className = "result-loss alert alert-danger";
+      div.className = "result loss";
     }
     div.appendChild(document.createTextNode(message));
 
@@ -96,14 +92,16 @@ class UI {
       this.togglePlayGame("show");
     }, 5000);
   }
+
   reveal(letter, data) {
     const letterDivs = document.querySelectorAll(`.word-letter`);
     for (let i = 0; i < gameState.revealedLetters.length; i++) {
       if (data.revealedLetters[i] !== null) {
         if (gameState.revealedLetters[i] === null) {
           letterDivs[i].innerHTML = `
-              <u>${letter}</ul>
+          <p>${letter}</p>
           `;
+          letterDivs[i].className = "word-letter correct";
         }
       }
     }
@@ -119,7 +117,7 @@ class UI {
 
     for (let i = a; i <= z; i++) {
       let button = document.createElement("button");
-      button.className = "input-letter btn btn-warning border border-dark";
+      button.className = "input-letter";
       button.id = String.fromCharCode(i);
       button.dataset.status = "false";
       button.textContent = button.id;
@@ -155,9 +153,6 @@ function guess(e) {
             ui.changeGuessState(e.target, "correct");
             ui.reveal(e.target.id, data);
             updateGameState(data);
-            console.log(
-              `correctGuesses: ${gameState.correctGuesses}  guessesToWin: ${gameState.guessesToWin}`
-            );
             if (data.status === "WIN") {
               ui.gameOver(
                 true,
@@ -198,7 +193,7 @@ function startNewGame(e) {
     .then(res => res.json())
     .then(data => {
       gameState = data;
-      console.log(gameState);
+      console.log(gameState.word);
       ui.initGame(gameState.word);
     })
     .catch(err => console.log(err));
