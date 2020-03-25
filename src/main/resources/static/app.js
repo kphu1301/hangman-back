@@ -139,7 +139,7 @@ function guess(e) {
         guess: e.target.id
       };
 
-      fetch(`http://localhost:8080/games/${gameState.id}`, {
+      fetch(`https://hangman-custom.herokuapp.com/games/${gameState.id}`, {
         headers: {
           "Content-Type": "application/json"
         },
@@ -189,11 +189,10 @@ function startNewGame(e) {
   ui.playGameEl.style = "display: none";
 
   //get word
-  fetch("http://localhost:8080/games")
+  fetch("https://hangman-custom.herokuapp.com/games")
     .then(res => res.json())
     .then(data => {
       gameState = data;
-      console.log(gameState.word);
       ui.initGame(gameState.word);
     })
     .catch(err => console.log(err));
