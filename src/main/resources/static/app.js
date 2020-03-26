@@ -139,7 +139,7 @@ function guess(e) {
         guess: e.target.id
       };
 
-      fetch(`https://hangman-custom.herokuapp.com//games/${gameState.id}`, {
+      fetch(`${serverUrl}/games/${gameState.id}`, {
         headers: {
           "Content-Type": "application/json"
         },
@@ -181,6 +181,7 @@ function guess(e) {
 
 let gameState;
 const ui = new UI();
+const serverUrl = "https://hangman-custom.herokuapp.com";
 
 // play new game event
 ui.playGameEl.addEventListener("click", startNewGame);
@@ -189,7 +190,7 @@ function startNewGame(e) {
   ui.playGameEl.style = "display: none";
 
   //get word
-  fetch("https://hangman-custom.herokuapp.com//games")
+  fetch(`${serverUrl}/games`)
     .then(res => res.json())
     .then(data => {
       gameState = data;
