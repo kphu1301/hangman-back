@@ -38,14 +38,47 @@
             <line x1="60" y1="0" x2="60" y2="210"></line>
             <line x1="20" y1="210" x2="140" y2="210"></line>
 
-            <circle cx="140" cy="50" r="20" class="body-part" />
-            <line x1="140" y1="70" x2="140" y2="130" class="body-part"></line>
-            <line x1="140" y1="100" x2="120" y2="80" class="body-part"></line>
-            <line x1="140" y1="100" x2="160" y2="80" class="body-part"></line>
-            <line x1="140" y1="130" x2="120" y2="160" class="body-part"></line>
-            <line x1="140" y1="130" x2="160" y2="160" class="body-part"></line>
+            <circle cx="140" cy="50" r="20" class="body-part hidden" />
+            <line
+              x1="140"
+              y1="70"
+              x2="140"
+              y2="130"
+              class="body-part hidden"
+            ></line>
+            <line
+              x1="140"
+              y1="100"
+              x2="120"
+              y2="80"
+              class="body-part hidden"
+            ></line>
+            <line
+              x1="140"
+              y1="100"
+              x2="160"
+              y2="80"
+              class="body-part hidden"
+            ></line>
+            <line
+              x1="140"
+              y1="130"
+              x2="120"
+              y2="160"
+              class="body-part hidden"
+            ></line>
+            <line
+              x1="140"
+              y1="130"
+              x2="160"
+              y2="160"
+              class="body-part hidden"
+            ></line>
           </svg>
-          <h3 id="letters-played">Letters Played</h3>
+          <div class="guessed-letters-container">
+            <div id="guessed-letters-title">Guessed Letters</div>
+            <div class="guessed-letters"></div>
+          </div>
         </div>
         <div class="word-container"></div>
         <div class="input">
@@ -75,6 +108,10 @@
           <button class="input-letter" id="X">X</button>
           <button class="input-letter" id="Y">Y</button>
           <button class="input-letter" id="Z">Z</button>
+        </div>
+
+        <div class="result-container hidden">
+          <div class="result"></div>
         </div>
       </div>
     </section>

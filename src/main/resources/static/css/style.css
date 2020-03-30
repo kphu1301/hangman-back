@@ -55,10 +55,6 @@ section {
   align-items: center;
 }
 
-.container.hidden {
-  display: none;
-}
-
 .play-btn {
   background-color: blue;
   color: white;
@@ -71,8 +67,8 @@ section {
   padding: 0.5em;
 }
 
-.play-btn.hidden {
-  display: none;
+.play-btn:hover {
+  transform: scale(1.2);
 }
 
 #category {
@@ -91,8 +87,20 @@ section {
   stroke-linecap: round;
 }
 
-#letters-played {
+.guessed-letters-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+#guessed-letters-title {
   font-size: 2.75rem;
+  font-weight: bold;
+  border-bottom: 0.1em solid white;
+}
+.guessed-letters {
+  font-size: 2.5rem;
   font-weight: bold;
 }
 
@@ -143,4 +151,43 @@ section {
 .letter {
   font-size: 5rem;
   font-weight: bold;
+}
+
+.result-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(47, 79, 79, 0.6);
+}
+
+.result {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5em;
+  font-weight: bold;
+  border-style: solid;
+  border-color: black;
+  padding: 0.25em;
+  text-align: center;
+  line-height: 1.5em;
+  padding: 0.5em 1em;
+  border-radius: 0.5em;
+}
+.result.result-win {
+  background-color: green;
+}
+
+.result.result-loss {
+  background-color: red;
+}
+
+.play-again {
+  margin-top: 0.25em;
+}
+.hidden {
+  display: none;
 }
