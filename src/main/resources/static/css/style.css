@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css?family=Abel&display=swap");
-
 * {
   margin: 0;
   padding: 0;
@@ -12,7 +10,6 @@ html {
 body {
   background-image: url("images/earthspirit.png");
   font-size: 1.6rem;
-  font-family: "Abel", sans-serif;
   height: 100vh;
 }
 
@@ -51,8 +48,30 @@ section {
   align-items: center;
   color: white;
 }
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
-#play-btn {
+.container.hidden {
+  display: none;
+}
+
+.play-btn {
+  background-color: blue;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  border-radius: 0.3em;
+  border-style: solid;
+  border-color: darkblue;
+  line-height: 1.25em;
+  padding: 0.5em;
+}
+
+.play-btn.hidden {
   display: none;
 }
 
@@ -111,7 +130,7 @@ section {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .word-letter {
@@ -119,4 +138,9 @@ section {
   margin: 1em 0.5em;
   border-bottom: 0.35em solid white;
   text-align: center;
+}
+
+.letter {
+  font-size: 5rem;
+  font-weight: bold;
 }
