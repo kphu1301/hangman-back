@@ -23,8 +23,9 @@ UI.prototype.resetUI = function() {
   this.wordContainer.innerHTML = "";
 
   //hide body parts
+  //svg elements dont have className property
   this.bodyParts.forEach(bodyPart => {
-    bodyPart.classList = "body-part hidden";
+    bodyPart.setAttribute("class", "body-part hidden");
   });
 
   //clear guessed letters
