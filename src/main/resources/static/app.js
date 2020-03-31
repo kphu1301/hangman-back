@@ -1,6 +1,5 @@
-function UI(word) {
+function UI() {
   //ui elements
-  this.word = word;
   this.playBtn = document.querySelector(".play-btn");
   this.category = document.querySelector("#category");
   this.bodyParts = document.querySelectorAll(".body-part");
@@ -10,19 +9,42 @@ function UI(word) {
   this.inputLetters = document.querySelectorAll(".input-letter");
   this.resultContainer = document.querySelector(".result-container");
   this.result = document.querySelector(".result");
-  this.init();
 }
 
-UI.prototype.init = function() {
-  this.togglePlayBtn();
+UI.prototype.init = function(word) {
+  this.word = word;
+  this.playBtn.className = "play-btn hidden";
   this.showGameContainer();
 };
-UI.prototype.togglePlayBtn = function() {
-  this.playBtn.classList.toggle("hidden");
+
+UI.prototype.resetUI = function() {
+  //clear word
+  this.word = "";
+  this.wordContainer.innerHTML = "";
+
+  //hide body parts
+  this.bodyParts.forEach(bodyPart => {
+    bodyPart.classList = "body-part hidden";
+  });
+
+  //clear guessed letters
+  this.guessedLetters.innerHTML = "";
+  this.inputLetters.forEach(inputLetter => {
+    inputLetter.className = "input-letter";
+  });
+
+  //clear result
+  this.result.innerHTML = "";
+  this.result.className = "result";
+  this.resultContainer.className = "result-container hidden";
+
+  //
 };
 
 UI.prototype.showGameContainer = function() {
-  this.container.classList.toggle("hidden");
+  if (this.container.classList.contains("hidden")) {
+    this.container.classList.remove("hidden");
+  }
   this.showWord();
 };
 
@@ -78,12 +100,9 @@ UI.prototype.showResult = function(gameResult, msg) {
   this.resultContainer.classList.remove("hidden");
 };
 
-function Hangman(ui) {
+function Hangman() {
   this.words = ["application", "pale", "background", "packers"];
-  this.word = this.words[Math.floor(Math.random() * this.words.length)]
-    .toUpperCase()
-    .split("");
-  this.ui = new UI(this.word);
+  this.ui = new UI();
   this.guessedLetters = [];
   this.wrongGuesses = 0;
   this.maxGuesses = 6;
@@ -93,6 +112,10 @@ function Hangman(ui) {
 }
 
 Hangman.prototype.init = function() {
+  this.word = this.words[Math.floor(Math.random() * this.words.length)]
+    .toUpperCase()
+    .split("");
+  this.ui.init(this.word);
   //add event listener for input
   document.querySelector(".input").addEventListener("click", e => {
     //listen for unguessed letters
@@ -127,12 +150,16 @@ Hangman.prototype.makeGuess = function(e) {
   this.checkGameStatus();
 };
 
+Hangman.prototype.resetUI = function() {
+  this.ui.resetUI();
+};
+
 Hangman.prototype.checkGameStatus = function() {
   if (this.correctGuesses === this.word.length) {
     this.gameStatus = "WIN";
     this.ui.showResult(
       this.gameStatus,
-      `Congratulations! You Win ${this.maxGuesses -
+      `Congratulations! You Win With ${this.maxGuesses -
         this.wrongGuesses} Guesses Left!`
     );
   } else if (this.wrongGuesses === this.maxGuesses) {
@@ -147,12 +174,14 @@ Hangman.prototype.checkGameStatus = function() {
 function App() {
   //add event listeners
   //play new game
+
   let game;
   document.querySelector(".play-btn").addEventListener("click", () => {
     game = new Hangman();
   });
   document.querySelector(".result").addEventListener("click", e => {
     if (e.target.classList.contains("play-again")) {
+      game.resetUI();
       game = new Hangman();
     }
   });

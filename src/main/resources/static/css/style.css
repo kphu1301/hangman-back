@@ -178,11 +178,11 @@ section {
   border-radius: 0.5em;
 }
 .result.result-win {
-  background-color: green;
+  background-color: #00b300;
 }
 
 .result.result-loss {
-  background-color: red;
+  background-color: #ff4d4d;
 }
 
 .play-again {
